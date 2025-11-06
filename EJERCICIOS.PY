@@ -734,3 +734,195 @@ Q = [
 taller22=taller2(Q,"pecausa")
 print(taller22)
             
+
+def taller3(A, B):
+    n, m = len(A), len(A[0])
+    a, b = len(B), len(B[0])
+
+    def rotar90(mat):
+        filas = len(mat)
+        columnas = len(mat[0])
+        rotada = []
+        for j in range(columnas):
+            nueva_fila = []
+            for i in range(filas - 1, -1, -1):
+                nueva_fila.append(mat[i][j])
+            rotada.append(nueva_fila)
+        return rotada
+
+    rot1 = rotar90(B)
+    rot2 = rotar90(rot1)
+    rot3 = rotar90(rot2)
+    versiones = [B, rot1, rot2, rot3]
+
+    def contiene(A, sub):
+        n, m = len(A), len(A[0])
+        a, b = len(sub), len(sub[0])
+        for i in range(n - a + 1):
+            for j in range(m - b + 1):
+                match = True
+                for x in range(a):
+                    if A[i + x][j:j + b] != sub[x]:
+                        match = False
+                        break
+                if match:
+                    return True
+        return False
+
+    for version in versiones:
+        if contiene(A, version):
+            return True
+    return False
+
+
+
+def taller4():
+    d = 4  
+
+    def crearmatriz(d):
+        alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+        a = []
+        cont = 0
+        for i in range(d):
+            fila = []
+            for j in range(d):
+                fila.append(alfabeto[cont % len(alfabeto)])  # letras en lugar de números
+                cont += 1
+            a.append(fila)
+        return a
+
+    matriz = crearmatriz(d)
+    print("🔹 Matriz original:")
+    for fila in matriz:
+        print(fila)
+
+    clave = "pacosa"
+
+    def cifrado(a, clave):
+        alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+        n = len(a)
+        matrizcifrada = []
+
+        for i in range(n):
+            palabra = "".join(a[i])
+            valores = [alfabeto.index(letra) for letra in palabra]
+            valorescl = [alfabeto.index(l) for l in clave]
+            claveexp = [valorescl[k % len(valorescl)] for k in range(len(valores))]
+
+            filacifrada = []
+            for k in range(len(valores)):
+                nuevovalor = (valores[k] + claveexp[k]) % 27
+                filacifrada.append(alfabeto[nuevovalor])
+            matrizcifrada.append(filacifrada)
+        return matrizcifrada
+
+    cifrada = cifrado(matriz, clave)
+    print("\n🔹 Matriz cifrada:")
+    for fila in cifrada:
+        print(fila)
+
+    def SubMatriz(a, b):
+        n, m = len(a), len(a[0])
+        k, l = len(b), len(b[0])
+        for i in range(n - k + 1):
+            for j in range(m - l + 1):
+                segmento = [a[x][j:j+l] for x in range(i, i+k)]
+                if segmento == b:
+                    return True, segmento
+        return False, None
+
+    p = [
+      ["p","o","s","a"],
+      ["s","a","a","e"],
+      ["q","q","q","q"]
+    ]
+    encontrado, sub = SubMatriz(cifrada, p)
+
+    def descifrarVigenere(matriz, clave):
+        if matriz is None:
+            return "No se encontró submatriz."
+        alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+        matrizdescifrada = []
+
+        for fila in matriz:
+            valores = [alfabeto.index(l) for l in fila]
+            valorescl = [alfabeto.index(l) for l in clave]
+            claveexp = [valorescl[k % len(valorescl)] for k in range(len(valores))]
+
+            filadesc = []
+            for k in range(len(valores)):
+                nuevovalor = (valores[k] - claveexp[k]) % 27
+                filadesc.append(alfabeto[nuevovalor])
+            matrizdescifrada.append(filadesc)
+        return matrizdescifrada
+
+    print(" Resultado:")
+    if encontrado:
+        print("Submatriz encontrada ")
+        descifrada = descifrarVigenere(sub, clave)
+        for fila in descifrada:
+            print(fila)
+    else:
+        print("No se encontró la submatriz ")
+
+
+    
+
+
+
+
+Q = [
+  ["h", "o", "l", "a"],
+  ["p", "e", "r", "u"],
+  ["s", "o", "l", "e"]
+]
+taller22=taller2(Q,"pecausa")
+print(taller22)
+
+def miniAES(matriz, clave):
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+    clave_val = [alfabeto.index(c) for c in clave]
+
+    # SubBytes (sustituimos cada letra +3 posiciones)
+    sub = []
+    for fila in matriz:
+        nueva = []
+        for c in fila:
+            if c in alfabeto:
+                nueva.append(alfabeto[(alfabeto.index(c) + 3) % len(alfabeto)])
+            else:
+                nueva.append(c)
+        sub.append(nueva)
+
+    # ShiftRows
+    shift = []
+    for i, fila in enumerate(sub):
+        shift.append(fila[i:] + fila[:i])  # rotación izquierda
+
+    # AddRoundKey (sumar con clave)
+    cifrado = []
+    k = 0
+    for fila in shift:
+        nueva = []
+        for c in fila:
+            if c in alfabeto:
+                nueva.append(alfabeto[(alfabeto.index(c) + clave_val[k % len(clave_val)]) % len(alfabeto)])
+            else:
+                nueva.append(c)
+            k += 1
+        cifrado.append(nueva)
+
+    return cifrado
+
+# Ejemplo
+matriz = [
+    ["h", "o", "l", "a"],
+    ["m", "u", "n", "d"],
+    ["o", "a", "e", "s"],
+    ["x", "x", "x", "x"]
+]
+
+resultado = miniAES(matriz, "peca")
+print("Matriz cifrada tipo AES:")
+for fila in resultado:
+    print(fila)
