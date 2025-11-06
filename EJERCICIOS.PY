@@ -586,3 +586,151 @@ print(ej29)
 ej30=buscarSubmatrizCon1Rotacion(H,I)
 print(ej30)
 
+
+def cifrarVigenere(mensaje, clave):
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+    mensaje = mensaje
+    clave = clave
+
+    valor = []
+    for letra in mensaje:
+        if letra in alfabeto:
+            valor.append(alfabeto.index(letra))
+        else:
+            valor.append(-1)
+
+    valorcl = []
+    for letra in clave:
+        if letra in alfabeto:
+            valorcl.append(alfabeto.index(letra))
+
+    claveexp = []
+    for i in range(len(valor)):
+        claveexp.append(valorcl[i % len(valorcl)])
+
+    cifrado = []
+    for i in range(len(valor)):
+        if valor[i] != -1:
+            nuevovalor = (valor[i] + claveexp[i]) %27
+            cifrado.append(alfabeto[nuevovalor])
+        else:
+            cifrado.append(" ")
+
+    return (cifrado)
+
+
+def descifrarVigenere(mensajecifrado, clave):
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+    mensajecifrado = mensajecifrado
+    clave = clave
+
+    valores = []
+    for letra in mensajecifrado:
+        if letra in alfabeto:
+            valores.append(alfabeto.index(letra))
+        else:
+            valores.append(-1)
+
+    valorescl = []
+    for letra in clave:
+        if letra in alfabeto:
+            valorescl.append(alfabeto.index(letra))
+
+    if len(valorescl) == 0:
+        return "Error: clave inválida."
+
+    claveexp = []
+    for i in range(len(valores)):
+        claveexp.append(valorescl[i % len(valorescl)])
+
+    descifrado = []
+    for i in range(len(valores)):
+        if valores[i] != -1:
+            nuevovalor = (valores[i] - claveexp[i]) %27
+            descifrado.append(alfabeto[nuevovalor])
+        else:
+            descifrado.append(" ")
+
+    return (descifrado)
+
+
+
+texto = "chango"
+clave = "pecausa"
+
+cifrado = cifrarVigenere(texto, clave)
+print("Texto cifrado:", cifrado)
+
+descifrado = descifrarVigenere(cifrado, clave)
+print("Texto descifrado:", descifrado)
+
+
+def taller1(a):
+    n=len(a)
+    m=len(a[0])
+    acum=0
+    cont=0
+    c=[]
+    for i in range(n):
+        for j in range(m):
+            acum=acum+a[i][j]
+            cont=cont+1
+    promedio=acum/cont
+    for k in range(n):
+        fila=[]
+        for l in range(m):
+            if a[k][l]>promedio:
+                fila.append(a[k][l])
+        c.append(fila)
+    return c
+
+Ñ=[
+    [2,4,6],
+    [1,3,5],
+    [7,8,9]
+]
+taller11=taller1(Ñ)
+print(taller11)
+
+def taller2(a,d):
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
+    n=len(a)
+    m=len(a[0])
+    clave=d
+    matrizcifrada=[]
+    for i in range(n):
+        filacifrada=[]
+        palabra="".join(a[i])
+        valores=[]
+        for letra in palabra:
+            if letra in alfabeto:
+                valores.append(alfabeto.index(letra))
+            else:
+                valores.append(-1)
+
+
+        valorescl=[]
+        for letra in clave:
+            if letra in alfabeto:
+                valorescl.append(alfabeto.index(letra))
+            
+        claveexp=[]
+        for k in range(len(valores)):
+            claveexp.append(valorescl[k%len(valorescl)])
+            
+        for k in range(len(valores)):
+            if valores[k]!=-1:
+                nuevovalor=(valores[k]+claveexp[k])%27
+                filacifrada.append(alfabeto[nuevovalor])
+            else:
+                filacifrada.append(" ")
+        matrizcifrada.append(filacifrada)
+    return matrizcifrada
+Q = [
+  ["h", "o", "l", "a"],
+  ["p", "e", "r", "u"],
+  ["s", "o", "l", "e"]
+]
+taller22=taller2(Q,"pecausa")
+print(taller22)
+            
